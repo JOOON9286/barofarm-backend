@@ -1,4 +1,4 @@
-package com.example.barofarm_backend.WebConfig;
+package com.example.barofarm_backend.webconfig;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
