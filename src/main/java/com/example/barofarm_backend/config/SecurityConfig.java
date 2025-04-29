@@ -14,10 +14,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors() // ✅ CORS 허용
+                .and()
                 .csrf(csrf -> csrf.disable()) // CSRF 비활성화
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/register", "/api/auth/login").permitAll() // 공개 엔드포인트
-                        .anyRequest().authenticated() // 그 외는 인증 필요
+                .authorizeHttpRequests(auth -> auth.requestMatchers(
+                                        "/api/auth/register",
+                                        "/api/auth/login",
+                                        "/api/users/register",
+                                        "/api/users/login"
+                                ).permitAll()
+
+
+                                .anyRequest().authenticated() // 그 외는 인증 필요
                 );
 
         return http.build();
