@@ -1,6 +1,6 @@
 package com.example.barofarm_backend.service;
 
-import com.example.barofarm_backend.domain.Farmer;
+import com.example.barofarm_backend.entity.Farmer;
 import com.example.barofarm_backend.dto.request.FarmerSignupRequest;
 import com.example.barofarm_backend.dto.response.FarmerResponse;
 import com.example.barofarm_backend.repository.FarmerRepository;

@@ -1,6 +1,6 @@
 package com.example.barofarm_backend.service;
 
-import com.example.barofarm_backend.domain.User;
+import com.example.barofarm_backend.entity.User;
 import com.example.barofarm_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

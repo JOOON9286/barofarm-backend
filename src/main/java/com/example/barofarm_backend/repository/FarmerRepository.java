@@ -1,6 +1,6 @@
 package com.example.barofarm_backend.repository;
 
-import com.example.barofarm_backend.domain.Farmer;
+import com.example.barofarm_backend.entity.Farmer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
