@@ -1,6 +1,6 @@
 package com.example.barofarm_backend.service;
 
-import com.example.barofarm_backend.domain.User;
+import com.example.barofarm_backend.entity.User;
 import com.example.barofarm_backend.dto.LoginRequest;
 import com.example.barofarm_backend.dto.SignupRequest;
 import com.example.barofarm_backend.repository.UserRepository;

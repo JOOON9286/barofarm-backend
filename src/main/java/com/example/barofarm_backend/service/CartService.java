@@ -1,6 +1,6 @@
 package com.example.barofarm_backend.service;
 
-import com.example.barofarm_backend.domain.*;
+import com.example.barofarm_backend.entity.*;
 import com.example.barofarm_backend.dto.request.CartAddItemRequest;
 import com.example.barofarm_backend.dto.request.CartUpdateItemRequest;
 import com.example.barofarm_backend.dto.response.CartResponse;

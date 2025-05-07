@@ -1,4 +1,4 @@
-package com.example.barofarm_backend.domain;
+package com.example.barofarm_backend.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
