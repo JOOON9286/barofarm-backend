@@ -22,7 +22,17 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    private String name;
+    @Column(unique = true, nullable = false)
+    private String username;
+
+    @Column
+    private String nickname;
 
     private String phone;
+
+    @Column(length = 500)
+    private String refreshToken;
+
+    @Column(nullable = false)
+    private String role; // ROLE_USER 또는 ROLE_ADMIN
 }
