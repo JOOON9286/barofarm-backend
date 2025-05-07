@@ -5,7 +5,8 @@ import com.example.barofarm_backend.dto.request.FarmerSignupRequest;
 import com.example.barofarm_backend.dto.response.FarmerResponse;
 import com.example.barofarm_backend.repository.FarmerRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,7 +14,8 @@ import org.springframework.stereotype.Service;
 public class FarmerService {
 
     private final FarmerRepository farmerRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    //private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public FarmerResponse signup(FarmerSignupRequest request) {
         if (farmerRepository.existsByUsername(request.getUsername())) {
