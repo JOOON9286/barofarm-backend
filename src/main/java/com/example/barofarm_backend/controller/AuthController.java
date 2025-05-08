@@ -27,15 +27,15 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        User user = (User) userRepository.findByUsername(request.getUsername())
+        User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("비밀번호가 일치하지 않습니다.");
         }
 
-        String accessToken = jwtTokenProvider.createToken(user.getUsername(), "ROLE_USER");
-        String refreshToken = jwtTokenProvider.createRefreshToken(user.getUsername());
+        String accessToken = jwtTokenProvider.createToken(user.getEmail(), "ROLE_USER");
+        String refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
 
         user.setRefreshToken(refreshToken);
         userRepository.save(user);
@@ -43,7 +43,8 @@ public class AuthController {
         Map<String, Object> response = new HashMap<>();
         response.put("accessToken", accessToken);
         response.put("refreshToken", refreshToken);
-        response.put("username", user.getUsername());
+        response.put("email", user.getEmail());
+        response.put("name", user.getName());   //사용자 이름도 추가 클라이언트에서 보여주기 위해
 
         return ResponseEntity.ok(response);
     }
@@ -54,12 +55,12 @@ public class AuthController {
             return ResponseEntity.badRequest().body(result.getAllErrors());
         }
 
-        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+        if (userRepository.findByName(request.getName()).isPresent()) {
             return ResponseEntity.badRequest().body("이미 존재하는 사용자입니다.");
         }
 
         User newUser = new User();
-        newUser.setUsername(request.getUsername());
+        newUser.setName(request.getName());
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
         newUser.setRole("ROLE_USER");
         userRepository.save(newUser);
@@ -75,22 +76,22 @@ public class AuthController {
             return ResponseEntity.status(401).body("유효하지 않은 리프레시 토큰입니다.");
         }
 
-        String username = jwtTokenProvider.getUserId(refreshToken);
-        User user = (User) userRepository.findByUsername(username)
+        String email = jwtTokenProvider.getUserId(refreshToken);
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("사용자 없음"));
 
         if (!refreshToken.equals(user.getRefreshToken())) {
             return ResponseEntity.status(403).body("토큰이 일치하지 않습니다.");
         }
 
-        String newAccessToken = jwtTokenProvider.createToken(username, "ROLE_USER");
+        String newAccessToken = jwtTokenProvider.createToken(email, "ROLE_USER");
         return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
     }
 
     @GetMapping("/me")
     public ResponseEntity<?> getMyInfo(Authentication authentication) {
-        String username = authentication.getName();
-        return ResponseEntity.ok(Map.of("username", username));
+        String email = authentication.getName();
+        return ResponseEntity.ok(Map.of("email", email));
     }
 
 }
