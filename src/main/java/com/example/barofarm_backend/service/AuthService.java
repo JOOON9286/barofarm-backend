@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -17,6 +18,7 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    // 회원가입 처리
     public void register(SignupRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
@@ -25,12 +27,13 @@ public class AuthService {
         User user = new User();
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setUsername(request.getName());
+        user.setName(request.getName());
         user.setPhone(request.getPhone());
 
         userRepository.save(user);
     }
 
+    // 로그인 처리
     public boolean login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
