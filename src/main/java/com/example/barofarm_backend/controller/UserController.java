@@ -41,16 +41,16 @@ public class UserController {
     }
 
     // ✅ 로그인
-    @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest request) {
-        boolean success = authService.login(request);
-        if (success) {
-            return ResponseEntity.ok(Map.of("message", "로그인 성공"));
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("message", "로그인 실패"));
-        }
-    }
+//    @PostMapping("/login")
+//    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest request) {
+//        boolean success = authService.login(request);
+//        if (success) {
+//            return ResponseEntity.ok(Map.of("message", "로그인 성공"));
+//        } else {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+//                    .body(Map.of("message", "로그인 실패"));
+//        }
+//    }
 
     // ✅ 전체 사용자 조회
     @GetMapping
