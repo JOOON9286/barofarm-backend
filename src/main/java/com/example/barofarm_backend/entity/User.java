@@ -23,7 +23,7 @@ public class User {
     private String password;
 
     @Column(unique = true, nullable = false)
-    private String username;
+    private String name;
 
     @Column
     private String nickname;
@@ -34,5 +34,6 @@ public class User {
     private String refreshToken;
 
     @Column(nullable = false)
-    private String role; // ROLE_USER 또는 ROLE_ADMIN
+    private String role = "ROLE_USER";
+
 }
