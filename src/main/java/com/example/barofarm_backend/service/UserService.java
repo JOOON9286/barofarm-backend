@@ -18,9 +18,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public List<User> getAllUsers(){
-        return userRepository.findAll();
+    public List<User> getAllUsers() {
+        return userRepository.findAllByOrderByIdAsc(); // 정렬된 리스트 반환
     }
+
 
     public Optional<User> getUserById(Long id){
         return userRepository.findById(id);
