@@ -5,6 +5,8 @@ import com.example.barofarm_backend.dto.response.FarmerResponse;
 import com.example.barofarm_backend.service.FarmerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,4 +21,14 @@ public class FarmerController {
         FarmerResponse response = farmerService.signup(request);
         return ResponseEntity.ok(response);
     }
+
+
+
+    @GetMapping("/mypage")
+    public ResponseEntity<FarmerResponse> getMyInfo(@AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        FarmerResponse response = farmerService.getFarmerInfo(username);
+        return ResponseEntity.ok(response);
+    }
 }
+
