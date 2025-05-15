@@ -5,7 +5,6 @@ import com.example.barofarm_backend.dto.request.FarmerSignupRequest;
 import com.example.barofarm_backend.dto.response.FarmerResponse;
 import com.example.barofarm_backend.repository.FarmerRepository;
 import lombok.RequiredArgsConstructor;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 public class FarmerService {
 
     private final FarmerRepository farmerRepository;
-    //private final BCryptPasswordEncoder passwordEncoder;
     private final PasswordEncoder passwordEncoder;
 
     public FarmerResponse signup(FarmerSignupRequest request) {
@@ -34,14 +32,26 @@ public class FarmerService {
 
         Farmer saved = farmerRepository.save(farmer);
 
+        return toResponse(saved);
+    }
+
+    // 로그인된 농부 정보 조회
+    public FarmerResponse getFarmerInfo(String username) {
+        Farmer farmer = farmerRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("사용자 정보를 찾을 수 없습니다."));
+        return toResponse(farmer);
+    }
+
+    // 공통 응답 DTO 변환 로직
+    private FarmerResponse toResponse(Farmer farmer) {
         return FarmerResponse.builder()
-                .id(saved.getId())
-                .username(saved.getUsername())
-                .name(saved.getName())
-                .phone(saved.getPhone())
-                .address(saved.getAddress())
-                .certificationNumber(saved.getCertificationNumber())
-                .isVerified(saved.getIsVerified())
+                .id(farmer.getId())
+                .username(farmer.getUsername())
+                .name(farmer.getName())
+                .phone(farmer.getPhone())
+                .address(farmer.getAddress())
+                .certificationNumber(farmer.getCertificationNumber())
+                .isVerified(farmer.getIsVerified())
                 .build();
     }
 }
