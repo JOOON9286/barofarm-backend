@@ -33,7 +33,7 @@ public class AuthController {
             throw new RuntimeException("비밀번호가 일치하지 않습니다.");
         }
 
-        String accessToken = jwtTokenProvider.createToken(user.getEmail(), "ROLE_USER");
+        String accessToken = jwtTokenProvider.createToken(user.getEmail(), user.getRole());
         String refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
 
         user.setRefreshToken(refreshToken);
