@@ -29,18 +29,20 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .cors(Customizer.withDefaults()) // CORS 허용
-                .csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화 (JWT니까)
+                .csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화 (JWT 사용 시)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 미사용
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/auth/register",
                                 "/api/auth/login",
-                                "/api/users/register", // 이건 지워도 됨 (register 통일했으면)
-                                "/api/users/login"
+                                "/api/users/register", // 회원가입 경로
+                                "/api/users/login"     // 로그인 경로
                         ).permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
+
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN") // 관리자 전용
+                        .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN") // 일반 사용자
+                        .requestMatchers("/api/farmers/**").hasRole("FARMER") // ✅ 농부 전용
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
@@ -53,11 +55,11 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // ✅ CORS 상세 설정 (프론트 요청 허용)
+    // CORS 상세 설정
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:3001")); // 프론트 주소
+        config.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:3001")); // 프론트 도메인
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
