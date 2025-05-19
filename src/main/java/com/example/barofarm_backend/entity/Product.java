@@ -23,7 +23,6 @@ public class Product {
     private int stockQuantity;        // 재고 수량
     private String category;          // 과일, 채소
     private String imageUrl;          // 이미지
-
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
