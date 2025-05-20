@@ -66,6 +66,7 @@ public class AuthController {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .name(request.getName())
                 .phone(request.getPhone())
+                .address(request.getAddress())
                 .role("ROLE_USER")
                 .build();
 
@@ -94,9 +95,4 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<?> getMyInfo(Authentication authentication) {
-        String email = authentication.getName();
-        return ResponseEntity.ok(Map.of("email", email));
-    }
 }
