@@ -1,4 +1,4 @@
-package com.example.barofarm_backend.dto;
+package com.example.barofarm_backend.dto.request;
 
 import lombok.*;
 

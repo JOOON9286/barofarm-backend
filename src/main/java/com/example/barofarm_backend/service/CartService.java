@@ -1,8 +1,8 @@
 package com.example.barofarm_backend.service;
 
 import com.example.barofarm_backend.entity.*;
-import com.example.barofarm_backend.dto.request.CartAddItemRequest;
-import com.example.barofarm_backend.dto.request.CartUpdateItemRequest;
+import com.example.barofarm_backend.dto.request.CartAddProductRequest;
+import com.example.barofarm_backend.dto.request.CartUpdateProductRequest;
 import com.example.barofarm_backend.dto.response.CartResponse;
 import com.example.barofarm_backend.dto.response.CartResponse.CartItemResponse;
 import com.example.barofarm_backend.repository.CartItemRepository;
@@ -23,7 +23,7 @@ public class CartService {
     private final UserRepository userRepository;
 
     // 장바구니에 상품 추가
-    public void addItem(CartAddItemRequest request) {
+    public void addItem(CartAddProductRequest request) {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
@@ -43,7 +43,7 @@ public class CartService {
     }
 
     // 장바구니 아이템 수량 수정
-    public void updateItemQuantity(CartUpdateItemRequest request) {
+    public void updateItemQuantity(CartUpdateProductRequest request) {
         CartItem item = cartItemRepository.findById(request.getCartItemId())
                 .orElseThrow(() -> new IllegalArgumentException("장바구니 아이템을 찾을 수 없습니다."));
 

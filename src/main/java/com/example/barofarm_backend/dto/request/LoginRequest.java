@@ -1,10 +1,12 @@
 package com.example.barofarm_backend.dto.request;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class LoginRequest {
     private String email;
     private String password;

@@ -22,8 +22,6 @@ public class FarmerController {
         return ResponseEntity.ok(response);
     }
 
-
-
     @GetMapping("/mypage")
     public ResponseEntity<FarmerResponse> getMyInfo(@AuthenticationPrincipal UserDetails userDetails) {
         String username = userDetails.getUsername();
