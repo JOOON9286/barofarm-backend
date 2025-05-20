@@ -1,8 +1,8 @@
 package com.example.barofarm_backend.service;
 
+import com.example.barofarm_backend.dto.request.LoginRequest;
+import com.example.barofarm_backend.dto.request.SignupRequest;
 import com.example.barofarm_backend.entity.User;
-import com.example.barofarm_backend.dto.LoginRequest;
-import com.example.barofarm_backend.dto.SignupRequest;
 import com.example.barofarm_backend.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setName(request.getName());
         user.setPhone(request.getPhone());
-
+        user.setAddress(request.getAddress());
         userRepository.save(user);
     }
 
