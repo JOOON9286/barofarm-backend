@@ -4,11 +4,15 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class SignupRequest {
 
     @NotBlank(message = "이메일은 필수입니다.")
@@ -26,5 +30,9 @@ public class SignupRequest {
     @Size(min = 11, max = 11, message = "전화번호는 11자리여야 합니다.")
     @Pattern(regexp = "^010\\d{8}$", message = "010으로 시작하는 11자리 숫자만 입력 가능합니다.")
     private String phone;
+
+    @NotBlank(message = "주소를 입력해주세요.")
+    private String address;
+
 
 }
