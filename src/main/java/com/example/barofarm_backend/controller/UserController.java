@@ -1,6 +1,7 @@
 package com.example.barofarm_backend.controller;
 
 import com.example.barofarm_backend.dto.request.PasswordChangeRequest;
+import com.example.barofarm_backend.dto.response.UserResponseDto;
 import com.example.barofarm_backend.entity.User;
 import com.example.barofarm_backend.service.UserService;
 import com.example.barofarm_backend.util.JwtTokenProvider;
@@ -70,12 +71,11 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    // 로그인한 사용자 정보 조회 (마이페이지용)
     @GetMapping("/me")
     public ResponseEntity<?> getMyInfo(@RequestHeader("Authorization") String authHeader) {
         try {
             String token = authHeader.replace("Bearer ", "");
-            String email = jwtTokenProvider.getUserId(token); // JWT에서 이메일 추출
+            String email = jwtTokenProvider.getUserId(token);
 
             Optional<User> userOpt = userService.getUserByEmail(email);
             if (userOpt.isEmpty()) {
@@ -83,16 +83,20 @@ public class UserController {
             }
 
             User user = userOpt.get();
-            Map<String, Object> response = new HashMap<>();
-            response.put("name", user.getName());
-            response.put("username", user.getEmail());
-            response.put("phone", user.getPhone());
-            response.put("role", user.getRole());
 
-            return ResponseEntity.ok(response);
+            UserResponseDto dto = UserResponseDto.builder()
+                    .email(user.getEmail())
+                    .name(user.getName())
+                    .phone(user.getPhone())
+                    .address(user.getAddress())
+                    .createdAt(user.getCreatedAt())
+                    .build();
+
+            return ResponseEntity.ok(dto);
 
         } catch (Exception e) {
             return ResponseEntity.status(401).body("인증 실패: " + e.getMessage());
         }
     }
+
 }
