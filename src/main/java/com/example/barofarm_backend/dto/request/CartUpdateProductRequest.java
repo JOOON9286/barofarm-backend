@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CartUpdateItemRequest {//상품 수량 수정
+public class CartUpdateProductRequest {//상품 수량 수정
 
     private Long cartItemId;
     private int quantity;
