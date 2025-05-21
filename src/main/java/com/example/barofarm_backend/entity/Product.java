@@ -22,8 +22,11 @@ public class Product {
     private int stockQuantity;        // 재고 수량
     private String category;          // 과일, 채소
     private String imageUrl;          // 이미지
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private LocalDateTime createdAt;    //생성일
+    private LocalDateTime updatedAt;    //업뎃일
+    //원산지
+    //판매단위 (1팩)
+    //중량 1~5kg
 
 
 }
