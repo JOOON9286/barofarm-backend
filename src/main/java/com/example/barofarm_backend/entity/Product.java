@@ -24,9 +24,9 @@ public class Product {
     private String imageUrl;          // 이미지
     private LocalDateTime createdAt;    //생성일
     private LocalDateTime updatedAt;    //업뎃일
-    //원산지
-    //판매단위 (1팩)
-    //중량 1~5kg
+    private String origin;                   // 원산지
+    private String salesUnit;                // 판매 단위 (예: 1팩)
+    private String weight;                   // 중량 (예: 1~5kg)
 
 
 }
