@@ -44,6 +44,7 @@ public class AuthController {
         response.put("refreshToken", refreshToken);
         response.put("email", user.getEmail());
         response.put("name", user.getName());
+        response.put("id",user.getId());
 
         return ResponseEntity.ok(response);
     }
