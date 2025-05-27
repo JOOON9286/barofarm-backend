@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,27 +29,68 @@ public class ProductService {
                 .origin(request.getOrigin())
                 .salesUnit(request.getSalesUnit())
                 .weight(request.getWeight())
-                .createdAt(LocalDateTime.now()) // auditing 적용시 생략 가능
+                .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .user(user)
                 .build();
 
         Product saved = productRepository.save(product);
 
+        return toResponse(saved);
+    }
+
+    public List<ProductResponse> getAllProducts() {
+        return productRepository.findAll().stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    public ProductResponse getProductById(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("상품 ID " + id + "를 찾을 수 없습니다."));
+        return toResponse(product);
+    }
+
+    public ProductResponse updateProduct(Long id, ProductRequest request) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("상품 ID " + id + "를 찾을 수 없습니다."));
+
+        product.setProductName(request.getProductName());
+        product.setDescription(request.getDescription());
+        product.setPrice(request.getPrice());
+        product.setStockQuantity(request.getStockQuantity());
+        product.setCategory(request.getCategory());
+        product.setImageUrl(request.getImageUrl());
+        product.setOrigin(request.getOrigin());
+        product.setSalesUnit(request.getSalesUnit());
+        product.setWeight(request.getWeight());
+        product.setUpdatedAt(LocalDateTime.now());
+
+        return toResponse(productRepository.save(product));
+    }
+
+    public void deleteProduct(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new IllegalArgumentException("상품 ID " + id + "가 존재하지 않습니다.");
+        }
+        productRepository.deleteById(id);
+    }
+
+    private ProductResponse toResponse(Product product) {
         return ProductResponse.builder()
-                .productId(saved.getProductId())
-                .productName(saved.getProductName())
-                .description(saved.getDescription())
-                .price(saved.getPrice())
-                .stockQuantity(saved.getStockQuantity())
-                .category(saved.getCategory())
-                .imageUrl(saved.getImageUrl())
-                .origin(saved.getOrigin())
-                .salesUnit(saved.getSalesUnit())
-                .weight(saved.getWeight())
-                .createdAt(saved.getCreatedAt().toString())
-                .updatedAt(saved.getUpdatedAt().toString())
-                .userId(saved.getUser().getId())
+                .productId(product.getProductId())
+                .productName(product.getProductName())
+                .description(product.getDescription())
+                .price(product.getPrice())
+                .stockQuantity(product.getStockQuantity())
+                .category(product.getCategory())
+                .imageUrl(product.getImageUrl())
+                .origin(product.getOrigin())
+                .salesUnit(product.getSalesUnit())
+                .weight(product.getWeight())
+                .createdAt(product.getCreatedAt().toString())
+                .updatedAt(product.getUpdatedAt().toString())
+                .userId(product.getUser().getId())
                 .build();
     }
 }
