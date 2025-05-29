@@ -5,6 +5,7 @@ import com.example.barofarm_backend.dto.response.ProductResponse;
 import com.example.barofarm_backend.entity.Product;
 import com.example.barofarm_backend.entity.User;
 import com.example.barofarm_backend.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -92,5 +93,33 @@ public class ProductService {
                 .updatedAt(product.getUpdatedAt().toString())
                 .userId(product.getUser().getId())
                 .build();
+    }
+
+    public List<ProductResponse> getProductsByUser(User user) {
+        return productRepository.findByUser(user).stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    public ProductResponse updateMyProduct(Long id, ProductRequest request, User user) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("상품 ID " + id + "를 찾을 수 없습니다."));
+
+        if (!product.getUser().getId().equals(user.getId())) {
+            throw new SecurityException("본인의 상품만 수정할 수 있습니다.");
+        }
+
+        product.setProductName(request.getProductName());
+        product.setDescription(request.getDescription());
+        product.setPrice(request.getPrice());
+        product.setStockQuantity(request.getStockQuantity());
+        product.setCategory(request.getCategory());
+        product.setImageUrl(request.getImageUrl());
+        product.setOrigin(request.getOrigin());
+        product.setSalesUnit(request.getSalesUnit());
+        product.setWeight(request.getWeight());
+        product.setUpdatedAt(LocalDateTime.now());
+
+        return toResponse(productRepository.save(product));
     }
 }
