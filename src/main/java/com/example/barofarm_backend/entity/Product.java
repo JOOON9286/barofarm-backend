@@ -20,7 +20,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
     private String productName;              // 농산물 이름
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String description;       // 상세 설명 Lob는 긴 텍스트
 
     private int price;                // 가격
