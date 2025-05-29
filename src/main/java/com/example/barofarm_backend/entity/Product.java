@@ -2,6 +2,8 @@ package com.example.barofarm_backend.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -11,31 +13,33 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "product")
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long productId;
+    private String productName;              // 농산물 이름
+    @Column(columnDefinition = "TEXT")
+    private String description;       // 상세 설명 Lob는 긴 텍스트
 
-    private String name;              // 농산물 이름
-    private String description;       // 상세 설명
     private int price;                // 가격
-    private int stockQuantity;        // 재고 수량
+    private String stockQuantity;        // 재고 수량
     private String category;          // 과일, 채소
+
+    @Column(columnDefinition = "TEXT")
     private String imageUrl;          // 이미지
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    @CreatedDate
+    private LocalDateTime createdAt;    //생성일
+    @LastModifiedDate
+    private LocalDateTime updatedAt;    //업뎃일
+    private String origin;    // 원산지
+    private String salesUnit;                // 판매 단위 (예: 1팩)
+    private String weight;                   // 중량 (예: 1~5kg)
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")   //User의 id와 외래키 관계
+    private User user;
 
 }

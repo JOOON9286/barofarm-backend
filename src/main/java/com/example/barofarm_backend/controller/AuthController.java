@@ -13,8 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -34,7 +33,7 @@ public class AuthController {
             throw new RuntimeException("비밀번호가 일치하지 않습니다.");
         }
 
-        String accessToken = jwtTokenProvider.createToken(user.getEmail(), "ROLE_USER");
+        String accessToken = jwtTokenProvider.createToken(user.getEmail(), user.getRole());
         String refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
 
         user.setRefreshToken(refreshToken);
@@ -44,7 +43,8 @@ public class AuthController {
         response.put("accessToken", accessToken);
         response.put("refreshToken", refreshToken);
         response.put("email", user.getEmail());
-        response.put("name", user.getName());   //사용자 이름도 추가 클라이언트에서 보여주기 위해
+        response.put("name", user.getName());
+        response.put("id",user.getId());
 
         return ResponseEntity.ok(response);
     }
@@ -52,20 +52,28 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody SignupRequest request, BindingResult result) {
         if (result.hasErrors()) {
-            return ResponseEntity.badRequest().body(result.getAllErrors());
+            List<String> errors = result.getAllErrors().stream()
+                    .map(error -> error.getDefaultMessage())
+                    .toList();
+            return ResponseEntity.badRequest().body(Map.of("errors", errors));
         }
 
-        if (userRepository.findByName(request.getName()).isPresent()) {
-            return ResponseEntity.badRequest().body("이미 존재하는 사용자입니다.");
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "이미 사용 중인 이메일입니다."));
         }
 
-        User newUser = new User();
-        newUser.setName(request.getName());
-        newUser.setPassword(passwordEncoder.encode(request.getPassword()));
-        newUser.setRole("ROLE_USER");
+        User newUser = User.builder()
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .name(request.getName())
+                .phone(request.getPhone())
+                .address(request.getAddress())
+                .role("ROLE_USER")
+                .build();
+
         userRepository.save(newUser);
 
-        return ResponseEntity.ok("회원가입이 완료되었습니다.");
+        return ResponseEntity.ok(Map.of("message", "회원가입이 완료되었습니다."));
     }
 
     @PostMapping("/refresh")
@@ -86,12 +94,6 @@ public class AuthController {
 
         String newAccessToken = jwtTokenProvider.createToken(email, "ROLE_USER");
         return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
-    }
-
-    @GetMapping("/me")
-    public ResponseEntity<?> getMyInfo(Authentication authentication) {
-        String email = authentication.getName();
-        return ResponseEntity.ok(Map.of("email", email));
     }
 
 }
