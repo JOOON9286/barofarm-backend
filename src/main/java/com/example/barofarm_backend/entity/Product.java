@@ -24,7 +24,9 @@ public class Product {
     private String description;       // 상세 설명 Lob는 긴 텍스트
 
     private int price;                // 가격
-    private String stockQuantity;        // 재고 수량
+    // String > int로 수정.
+    // OrderService 32Line
+    private int stockQuantity;        // 재고 수량
     private String category;          // 과일, 채소
 
     @Column(columnDefinition = "TEXT")
