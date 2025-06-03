@@ -24,7 +24,7 @@ public class ProductService {
                 .productName(request.getProductName())
                 .description(request.getDescription())
                 .price(request.getPrice())
-                .stockQuantity(request.getStockQuantity())
+                .stockQuantity(Integer.parseInt(request.getStockQuantity()))
                 .category(request.getCategory())
                 .imageUrl(request.getImageUrl())
                 .origin(request.getOrigin())
@@ -59,7 +59,7 @@ public class ProductService {
         product.setProductName(request.getProductName());
         product.setDescription(request.getDescription());
         product.setPrice(request.getPrice());
-        product.setStockQuantity(request.getStockQuantity());
+        product.setStockQuantity(Integer.parseInt(request.getStockQuantity()));
         product.setCategory(request.getCategory());
         product.setImageUrl(request.getImageUrl());
         product.setOrigin(request.getOrigin());
@@ -83,7 +83,7 @@ public class ProductService {
                 .productName(product.getProductName())
                 .description(product.getDescription())
                 .price(product.getPrice())
-                .stockQuantity(product.getStockQuantity())
+                .stockQuantity(String.valueOf(product.getStockQuantity()))
                 .category(product.getCategory())
                 .imageUrl(product.getImageUrl())
                 .origin(product.getOrigin())
@@ -112,7 +112,7 @@ public class ProductService {
         product.setProductName(request.getProductName());
         product.setDescription(request.getDescription());
         product.setPrice(request.getPrice());
-        product.setStockQuantity(request.getStockQuantity());
+        product.setStockQuantity(Integer.parseInt(request.getStockQuantity()));
         product.setCategory(request.getCategory());
         product.setImageUrl(request.getImageUrl());
         product.setOrigin(request.getOrigin());
