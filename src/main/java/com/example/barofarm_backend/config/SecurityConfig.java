@@ -37,7 +37,8 @@ public class SecurityConfig {
                                 "/api/auth/register",
                                 "/api/auth/login",
                                 "/api/users/register", // 회원가입 경로
-                                "/api/users/login"     // 로그인 경로
+                                "/api/users/login",     // 로그인 경로
+                                "/api/products"
                         ).permitAll()
 
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // 관리자 전용

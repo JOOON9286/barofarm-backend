@@ -22,5 +22,5 @@ public class ProductResponse {
     private String weight;            // 중량 정보 (예: 1~5kg)
     private String createdAt;         // 생성일 (String 형태로 반환)
     private String updatedAt;         // 수정일 (String 형태로 반환)
-    private Long userId;    // 등록 회원 id
+    private Long userId;    // 등록 농부 id
 }
