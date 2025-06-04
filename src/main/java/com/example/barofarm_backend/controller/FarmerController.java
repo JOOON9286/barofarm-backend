@@ -16,17 +16,17 @@ public class FarmerController {
 
     private final FarmerService farmerService;
 
-    @PostMapping("/signup")
-    public ResponseEntity<FarmerResponse> signup(@RequestBody FarmerSignupRequest request) {
-        FarmerResponse response = farmerService.signup(request);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/mypage")
-    public ResponseEntity<FarmerResponse> getMyInfo(@AuthenticationPrincipal UserDetails userDetails) {
-        String username = userDetails.getUsername();
-        FarmerResponse response = farmerService.getFarmerInfo(username);
-        return ResponseEntity.ok(response);
-    }
+//    @PostMapping("/signup")
+//    public ResponseEntity<FarmerResponse> signup(@RequestBody FarmerSignupRequest request) {
+//        FarmerResponse response = farmerService.signup(request);
+//        return ResponseEntity.ok(response);
+//    }
+//
+//    @GetMapping("/mypage")
+//    public ResponseEntity<FarmerResponse> getMyInfo(@AuthenticationPrincipal UserDetails userDetails) {
+//        String username = userDetails.getUsername();
+//        FarmerResponse response = farmerService.getFarmerInfo(username);
+//        return ResponseEntity.ok(response);
+//    }
 }
 
