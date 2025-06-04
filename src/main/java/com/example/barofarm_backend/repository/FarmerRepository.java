@@ -7,7 +7,4 @@ import java.util.Optional;
 
 public interface FarmerRepository extends JpaRepository<Farmer, Long> {
 
-    Optional<Farmer> findByUsername(String username);
-
-    boolean existsByUsername(String username);
 }
