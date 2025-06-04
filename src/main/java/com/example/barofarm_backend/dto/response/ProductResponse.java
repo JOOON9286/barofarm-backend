@@ -23,4 +23,7 @@ public class ProductResponse {
     private String createdAt;         // 생성일 (String 형태로 반환)
     private String updatedAt;         // 수정일 (String 형태로 반환)
     private Long userId;    // 등록 농부 id
+    private String userName;           // 등록 농부 이름
+    private String farmerDescription;  // 농부 설명
+
 }

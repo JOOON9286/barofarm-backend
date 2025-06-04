@@ -47,5 +47,9 @@ public class User {
 
     @Column(nullable = false)
     private String role = "ROLE_USER";
+    
+    // Farmer와 양방향 매핑
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private Farmer farmer;
 
 }
