@@ -1,6 +1,8 @@
 package com.example.barofarm_backend.service;
 
+import com.example.barofarm_backend.entity.Farmer;
 import com.example.barofarm_backend.entity.User;
+import com.example.barofarm_backend.repository.FarmerRepository;
 import com.example.barofarm_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,6 +47,15 @@ public class UserService {
     public void updatePassword(User user, String newPassword) {
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
+    }
+    
+    
+    // 마이페이지 정보변경
+    @Autowired
+    private FarmerRepository farmerRepository; // 선언 추가
+
+    public void saveFarmer(Farmer farmer) {
+        farmerRepository.save(farmer);
     }
 
 }
