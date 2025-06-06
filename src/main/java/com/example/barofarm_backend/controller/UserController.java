@@ -42,7 +42,7 @@ public class UserController {
 
         try {
             String token = authHeader.replace("Bearer ", "");
-            String email = jwtTokenProvider.getUserId(token); // JWT에서 이메일 추출
+            String email = jwtTokenProvider.getEmail(token); // JWT에서 이메일 추출
 
             Optional<User> userOpt = userService.getUserByEmail(email);
             if (userOpt.isEmpty()) {
@@ -77,7 +77,7 @@ public class UserController {
     public ResponseEntity<?> getMyInfo(@RequestHeader("Authorization") String authHeader) {
         try {
             String token = authHeader.replace("Bearer ", "");
-            String email = jwtTokenProvider.getUserId(token);
+            String email = jwtTokenProvider.getEmail(token);
 
             Optional<User> userOpt = userService.getUserByEmail(email);
             if (userOpt.isEmpty()) {
@@ -109,7 +109,7 @@ public class UserController {
             @RequestBody FarmerDescriptionUpdateRequest request) {
         try {
             String token = authHeader.replace("Bearer ", "");
-            String email = jwtTokenProvider.getUserId(token);
+            String email = jwtTokenProvider.getEmail(token);
 
             Optional<User> userOpt = userService.getUserByEmail(email);
             if (userOpt.isEmpty()) {

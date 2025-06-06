@@ -59,13 +59,13 @@ public class ReviewService {
     }
 
     public List<ReviewResponseDto> getReviewsByProduct(Long productId) {
-        return reviewRepository.findByProductId(productId).stream()
+        return reviewRepository.findByProductProductId(productId).stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
     }
 
     public double getAverageRating(Long productId) {
-        List<Review> reviews = reviewRepository.findByProductId(productId);
+        List<Review> reviews = reviewRepository.findByProductProductId(productId);
         return reviews.stream()
                 .mapToInt(Review::getRating)
                 .average()
