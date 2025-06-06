@@ -39,7 +39,7 @@ public class ProductQuestionService {
     }
 
     public List<ProductQuestionResponseDto> getByProduct(Long productId) {
-        return questionRepository.findByProductId(productId).stream()
+        return questionRepository.findByProductProductId(productId).stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
     }
