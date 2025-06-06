@@ -30,9 +30,11 @@ public class JwtTokenProvider {
     }
 
     // 토큰 생성
-    public String createToken(String userId, String role) {
+    public String createToken(String userId, String role, String email) {
         Claims claims = Jwts.claims().setSubject(userId);
         claims.put("role", role);
+        claims.put("email", email);
+        claims.put("userId", userId);
         Date now = new Date();
         return Jwts.builder()
                 .setClaims(claims)
@@ -69,6 +71,14 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+    }
+
+    public String getEmail(String token) {
+        return Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("email", String.class);
     }
 
     // 토큰 유효성 검사
