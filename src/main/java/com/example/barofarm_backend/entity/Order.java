@@ -32,6 +32,15 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items;
 
+    private String receiverName;
+    private String receiverPhone;
+    private String zipcode;
+    private String address;
+    private String addressDetail;
+    private String deliveryRequest;
+    private String paymentMethod;   //결제 방법
+    private int totalAmount;    //결제 총금액
+
     public void setItems(List<OrderItem> items) {
         this.items = items;
         for (OrderItem item : items) {
