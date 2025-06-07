@@ -21,6 +21,7 @@ public class OrderHistoryResponse {
     @Getter
     @Builder
     public static class OrderItemSummary {
+        private Long productId;
         private String productName;
         private int quantity;
         private int price;
