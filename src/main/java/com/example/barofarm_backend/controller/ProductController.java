@@ -23,7 +23,7 @@ public class ProductController {
 
     @GetMapping("/my")
     public ResponseEntity<List<ProductResponse>> getMyProducts(@RequestHeader("Authorization") String token) {
-        String userEmail = jwtTokenProvider.getUserId(token.replace("Bearer ", ""));
+        String userEmail = jwtTokenProvider.getEmail(token.replace("Bearer ", ""));
         User user = userService.getUserByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
@@ -36,7 +36,7 @@ public class ProductController {
     public ResponseEntity<?> createProduct(@RequestBody ProductRequest request,
                                            @RequestHeader("Authorization") String token) {
         try {
-            String userEmail = jwtTokenProvider.getUserId(token.replace("Bearer ", ""));
+            String userEmail = jwtTokenProvider.getEmail(token.replace("Bearer ", ""));
             User user = userService.getUserByEmail(userEmail)
                     .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
@@ -76,7 +76,7 @@ public class ProductController {
                                              @RequestBody ProductRequest request,
                                              @RequestHeader("Authorization") String token) {
         try {
-            String userEmail = jwtTokenProvider.getUserId(token.replace("Bearer ", ""));
+            String userEmail = jwtTokenProvider.getEmail(token.replace("Bearer ", ""));
             User user = userService.getUserByEmail(userEmail)
                     .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 

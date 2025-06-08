@@ -33,7 +33,7 @@ public class AuthController {
             throw new RuntimeException("비밀번호가 일치하지 않습니다.");
         }
 
-        String accessToken = jwtTokenProvider.createToken(user.getEmail(), user.getRole());
+        String accessToken = jwtTokenProvider.createToken(String.valueOf(user.getId()), user.getRole(), user.getEmail() );
         String refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
 
         user.setRefreshToken(refreshToken);
@@ -92,7 +92,7 @@ public class AuthController {
             return ResponseEntity.status(403).body("토큰이 일치하지 않습니다.");
         }
 
-        String newAccessToken = jwtTokenProvider.createToken(email, "ROLE_USER");
+        String newAccessToken = jwtTokenProvider.createToken(String.valueOf(user.getId()),email, "ROLE_USER");
         return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
     }
 

@@ -6,6 +6,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -39,9 +41,14 @@ public class Product {
     private String origin;    // 원산지
     private String salesUnit;                // 판매 단위 (예: 1팩)
     private String weight;                   // 중량 (예: 1~5kg)
-
+    
+    //User
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")   //User의 id와 외래키 관계
+    @JoinColumn(name = "user_id")   
     private User user;
+
+    //Product 1대 다 관계
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Wishlist> likedUsers = new ArrayList<>();
 
 }

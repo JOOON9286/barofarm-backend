@@ -28,10 +28,6 @@ public class OrderService {
 
     // 장바구니 결제 > 주문 저장,재고 차감,장바구니 비우기
     public List<OrderResponse> checkout(User user, CheckoutRequest request) {
-        Cart cart = cartRepository.findByUser(user)
-                .orElseThrow(() -> new RuntimeException("장바구니가 존재하지 않습니다."));
-
-        List<CartItem> items = cartItemRepository.findByCart(cart);
         List<OrderItem> orderItems = new ArrayList<>();
         List<OrderResponse> result = new ArrayList<>();
 
@@ -39,21 +35,27 @@ public class OrderService {
                 .user(user)
                 .deliveryDate(request.getDeliveryDate())
                 .deliveryTime(request.getDeliveryTime())
+                .receiverName(request.getReceiverName())
+                .receiverPhone(request.getReceiverPhone())
+                .zipcode(request.getZipcode())
+                .address(request.getAddress())
+                .addressDetail(request.getAddressDetail())
+                .deliveryRequest(request.getDeliveryRequest())
+                .paymentMethod(request.getPaymentMethod())
                 .orderedAt(LocalDateTime.now())
+                .totalAmount(request.getTotalAmount())
                 .status(OrderStatus.PAYMENT_COMPLETED)
                 .build();
 
-        for (CartItem item : items) {
-            Product product = productRepository.findById(item.getProductId())
-                    .orElseThrow(() -> new IllegalArgumentException("상품 ID를 찾을 수 없습니다."));
+        for (CheckoutRequest.ProductInfo productInfo : request.getProducts()) {
+            Product product = productRepository.findById(productInfo.getProductId())
+                    .orElseThrow(() -> new RuntimeException("상품 ID를 찾을 수 없습니다."));
 
-            int itemQuantity = item.getQuantity();
-
-            if (product.getStockQuantity() < itemQuantity) {
-                throw new IllegalArgumentException("재고가 부족한 상품이 있습니다: " + product.getProductName());
+            if (product.getStockQuantity() < productInfo.getQuantity()) {
+                throw new RuntimeException("재고가 부족한 상품이 있습니다: " + product.getProductName());
             }
 
-            product.setStockQuantity(product.getStockQuantity() - itemQuantity);
+            product.setStockQuantity(product.getStockQuantity() - productInfo.getQuantity());
             productRepository.save(product);
 
             OrderItem orderItem = OrderItem.builder()
@@ -61,8 +63,8 @@ public class OrderService {
                     .productId(product.getProductId())
                     .productName(product.getProductName())
                     .price(product.getPrice())
-                    .quantity(itemQuantity)
-                    .totalPrice(product.getPrice() * itemQuantity)
+                    .quantity(productInfo.getQuantity())
+                    .totalPrice(product.getPrice() * productInfo.getQuantity())
                     .build();
 
             orderItems.add(orderItem);
@@ -71,14 +73,13 @@ public class OrderService {
                     .productId(product.getProductId())
                     .productName(product.getProductName())
                     .price(product.getPrice())
-                    .quantity(itemQuantity)
-                    .totalPrice(product.getPrice() * itemQuantity)
+                    .quantity(productInfo.getQuantity())
+                    .totalPrice(product.getPrice() * productInfo.getQuantity())
                     .build());
         }
 
         order.setItems(orderItems);
         orderRepository.save(order);
-        cartItemRepository.deleteAll(items);
 
         return result;
     }
@@ -90,6 +91,7 @@ public class OrderService {
         return orders.stream().map(order -> {
             List<OrderHistoryResponse.OrderItemSummary> itemSummaries = order.getItems().stream().map(item ->
                     OrderHistoryResponse.OrderItemSummary.builder()
+                            .productId(item.getProductId())
                             .productName(item.getProductName())
                             .quantity(item.getQuantity())
                             .price(item.getPrice())

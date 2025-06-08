@@ -23,7 +23,7 @@ public class AddressController {
 
     private User getUserFromToken(String authHeader) {
         String token = authHeader.replace("Bearer ", "");
-        String email = jwtTokenProvider.getUserId(token);
+        String email = jwtTokenProvider.getEmail(token);
         return userService.getUserByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
     }
 

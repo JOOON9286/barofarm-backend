@@ -27,7 +27,7 @@ public class OrderController {
     @PostMapping("/checkout")
     public ResponseEntity<List<OrderResponse>> checkout(@RequestHeader("Authorization") String token,
                                                         @RequestBody CheckoutRequest request) {
-        String email = jwtTokenProvider.getUserId(token.replace("Bearer ", ""));
+        String email = jwtTokenProvider.getEmail(token.replace("Bearer ", ""));
         User user = userService.getUserByEmail(email)
                 .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
 
@@ -38,7 +38,7 @@ public class OrderController {
 
     @GetMapping("/history")
     public ResponseEntity<List<OrderHistoryResponse>> getOrderHistory(@RequestHeader("Authorization") String token) {
-        String email = jwtTokenProvider.getUserId(token.replace("Bearer ", ""));
+        String email = jwtTokenProvider.getEmail(token.replace("Bearer ", ""));
         User user = userService.getUserByEmail(email)
                 .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
 
@@ -56,7 +56,7 @@ public class OrderController {
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderDetailResponse> getOrderDetail(@PathVariable Long orderId,
                                                               @RequestHeader("Authorization") String token) {
-        String email = jwtTokenProvider.getUserId(token.replace("Bearer ", ""));
+        String email = jwtTokenProvider.getEmail(token.replace("Bearer ", ""));
         User user = userService.getUserByEmail(email)
                 .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
 
@@ -67,7 +67,7 @@ public class OrderController {
     @PatchMapping("/{orderId}/cancel")
     public ResponseEntity<String> cancelOrder(@PathVariable Long orderId,
                                               @RequestHeader("Authorization") String token) {
-        String email = jwtTokenProvider.getUserId(token.replace("Bearer ", ""));
+        String email = jwtTokenProvider.getEmail(token.replace("Bearer ", ""));
         User user = userService.getUserByEmail(email)
                 .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
 
