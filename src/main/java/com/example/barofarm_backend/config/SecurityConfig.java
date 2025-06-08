@@ -39,7 +39,9 @@ public class SecurityConfig {
                                 "/api/users/register", // 회원가입 경로
                                 "/api/users/login",     // 로그인 경로
                                 "/api/products",
-                                "/api/products/**"
+                                "/api/products/**",
+                                "/api/b2b/**",
+                                "/api/wishlist"
                         ).permitAll()
 
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // 관리자 전용
@@ -62,7 +64,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:3001")); // 프론트 도메인
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 
