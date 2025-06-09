@@ -8,8 +8,10 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ProductQuestionRequestDto {
+    private Long userId;
     private Long productId;
     private String title;
     private String content;
-    private boolean isPrivate;
+    private Boolean isPrivate;
+
 }
