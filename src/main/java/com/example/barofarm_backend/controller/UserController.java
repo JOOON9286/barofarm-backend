@@ -1,5 +1,6 @@
 package com.example.barofarm_backend.controller;
 
+import com.example.barofarm_backend.dto.request.FarmerDescriptionUpdateRequest;
 import com.example.barofarm_backend.dto.request.PasswordChangeRequest;
 import com.example.barofarm_backend.dto.response.UserResponseDto;
 import com.example.barofarm_backend.entity.User;
@@ -41,7 +42,7 @@ public class UserController {
 
         try {
             String token = authHeader.replace("Bearer ", "");
-            String email = jwtTokenProvider.getUserId(token); // JWT에서 이메일 추출
+            String email = jwtTokenProvider.getEmail(token); // JWT에서 이메일 추출
 
             Optional<User> userOpt = userService.getUserByEmail(email);
             if (userOpt.isEmpty()) {
@@ -70,12 +71,13 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
-
+    
+    // 마이페이지 정보 조회
     @GetMapping("/me")
     public ResponseEntity<?> getMyInfo(@RequestHeader("Authorization") String authHeader) {
         try {
             String token = authHeader.replace("Bearer ", "");
-            String email = jwtTokenProvider.getUserId(token);
+            String email = jwtTokenProvider.getEmail(token);
 
             Optional<User> userOpt = userService.getUserByEmail(email);
             if (userOpt.isEmpty()) {
@@ -90,6 +92,7 @@ public class UserController {
                     .phone(user.getPhone())
                     .address(user.getAddress())
                     .createdAt(user.getCreatedAt())
+                    .description(user.getFarmer() != null ? user.getFarmer().getDescription() : null) // 추가된 부분
                     .build();
 
             return ResponseEntity.ok(dto);
@@ -98,5 +101,48 @@ public class UserController {
             return ResponseEntity.status(401).body("인증 실패: " + e.getMessage());
         }
     }
+    
+    // 마이페이지 농부 설명 수정
+    @PutMapping("/me/description")
+    public ResponseEntity<?> updateMyDescription(
+            @RequestHeader("Authorization") String authHeader,
+            @RequestBody FarmerDescriptionUpdateRequest request) {
+        try {
+            String token = authHeader.replace("Bearer ", "");
+            String email = jwtTokenProvider.getEmail(token);
+
+            Optional<User> userOpt = userService.getUserByEmail(email);
+            if (userOpt.isEmpty()) {
+                return ResponseEntity.status(404).body("사용자 정보를 찾을 수 없습니다.");
+            }
+
+            User user = userOpt.get();
+
+            if (user.getFarmer() == null) {
+                return ResponseEntity.status(400).body("해당 사용자는 농부 정보가 없습니다.");
+            }
+
+            // 설명 업데이트
+            user.getFarmer().setDescription(request.getDescription());
+            userService.saveFarmer(user.getFarmer());
+
+            // 응답 DTO 생성
+            UserResponseDto dto = UserResponseDto.builder()
+                    .email(user.getEmail())
+                    .name(user.getName())
+                    .phone(user.getPhone())
+                    .address(user.getAddress())
+                    .createdAt(user.getCreatedAt())
+                    .description(user.getFarmer().getDescription())
+                    .build();
+
+            return ResponseEntity.ok(dto);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("설명 수정 중 오류 발생: " + e.getMessage());
+        }
+    }
+
+
 
 }

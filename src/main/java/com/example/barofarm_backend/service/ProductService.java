@@ -2,6 +2,7 @@ package com.example.barofarm_backend.service;
 
 import com.example.barofarm_backend.dto.request.ProductRequest;
 import com.example.barofarm_backend.dto.response.ProductResponse;
+import com.example.barofarm_backend.entity.Farmer;
 import com.example.barofarm_backend.entity.Product;
 import com.example.barofarm_backend.entity.User;
 import com.example.barofarm_backend.repository.ProductRepository;
@@ -24,7 +25,7 @@ public class ProductService {
                 .productName(request.getProductName())
                 .description(request.getDescription())
                 .price(request.getPrice())
-                .stockQuantity(request.getStockQuantity())
+                .stockQuantity(Integer.parseInt(request.getStockQuantity()))
                 .category(request.getCategory())
                 .imageUrl(request.getImageUrl())
                 .origin(request.getOrigin())
@@ -59,7 +60,7 @@ public class ProductService {
         product.setProductName(request.getProductName());
         product.setDescription(request.getDescription());
         product.setPrice(request.getPrice());
-        product.setStockQuantity(request.getStockQuantity());
+        product.setStockQuantity(Integer.parseInt(request.getStockQuantity()));
         product.setCategory(request.getCategory());
         product.setImageUrl(request.getImageUrl());
         product.setOrigin(request.getOrigin());
@@ -78,12 +79,17 @@ public class ProductService {
     }
 
     private ProductResponse toResponse(Product product) {
+        User user = product.getUser();
+
+        // user.getFarmer() 가 null일 수 있으니 null 체크
+        String farmerDescription = (user.getFarmer() != null) ? user.getFarmer().getDescription() : null;
+
         return ProductResponse.builder()
                 .productId(product.getProductId())
                 .productName(product.getProductName())
                 .description(product.getDescription())
                 .price(product.getPrice())
-                .stockQuantity(product.getStockQuantity())
+                .stockQuantity(String.valueOf(product.getStockQuantity()))
                 .category(product.getCategory())
                 .imageUrl(product.getImageUrl())
                 .origin(product.getOrigin())
@@ -91,9 +97,12 @@ public class ProductService {
                 .weight(product.getWeight())
                 .createdAt(product.getCreatedAt().toString())
                 .updatedAt(product.getUpdatedAt().toString())
-                .userId(product.getUser().getId())
+                .userId(user.getId())
+                .userName(user.getName())  // 등록 농부 이름 추가
+                .farmerDescription(farmerDescription)  // 농부 설명 추가
                 .build();
     }
+
 
     public List<ProductResponse> getProductsByUser(User user) {
         return productRepository.findByUser(user).stream()
@@ -112,7 +121,7 @@ public class ProductService {
         product.setProductName(request.getProductName());
         product.setDescription(request.getDescription());
         product.setPrice(request.getPrice());
-        product.setStockQuantity(request.getStockQuantity());
+        product.setStockQuantity(Integer.parseInt(request.getStockQuantity()));
         product.setCategory(request.getCategory());
         product.setImageUrl(request.getImageUrl());
         product.setOrigin(request.getOrigin());

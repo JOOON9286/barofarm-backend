@@ -9,25 +9,19 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CartItem {
+@Table(name = "orderitem")
+public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 장바구니와 연결
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
+    private Order order;
+
     private Long productId;
     private String productName;
-
     private int quantity;
     private int price;
-    private int totalPrice;  // 수량 * 단가
-
-    public void updateQuantity(int quantity) {
-        this.quantity = quantity;
-        this.totalPrice = this.price * quantity;
-    }
+    private int totalPrice;
 }

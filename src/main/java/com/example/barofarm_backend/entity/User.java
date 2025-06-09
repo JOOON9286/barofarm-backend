@@ -8,6 +8,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -47,5 +49,17 @@ public class User {
 
     @Column(nullable = false)
     private String role = "ROLE_USER";
+    
+    // Farmer와 양방향 매핑
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private Farmer farmer;
+
+    // 배송지 1 : N 관계
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Address> addresses = new ArrayList<>();
+
+    // 찜목록 1 : N 관계
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Wishlist> wishlists = new ArrayList<>();
 
 }
