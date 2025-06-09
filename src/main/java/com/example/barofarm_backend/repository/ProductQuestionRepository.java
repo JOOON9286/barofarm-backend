@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ProductQuestionRepository extends JpaRepository<ProductQuestion, Long> {
     List<ProductQuestion> findByProductProductId(Long productId);
+    List<ProductQuestion> findByUserId(Long userId);
 }

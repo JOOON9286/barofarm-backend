@@ -10,10 +10,11 @@ import java.time.LocalDateTime;
 @Builder
 public class ProductQuestionResponseDto {
     private Long id;
+    private Long userId;
     private String username;
     private String title;
     private String content;
-    private boolean isPrivate;
-    private boolean answered;
+    private Boolean isPrivate;
+    private Boolean answered;
     private LocalDateTime createdAt;
 }
