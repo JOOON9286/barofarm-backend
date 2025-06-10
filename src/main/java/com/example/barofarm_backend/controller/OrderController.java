@@ -4,12 +4,14 @@ import com.example.barofarm_backend.dto.request.CheckoutRequest;
 import com.example.barofarm_backend.dto.response.OrderDetailResponse;
 import com.example.barofarm_backend.dto.response.OrderResponse;
 import com.example.barofarm_backend.dto.response.OrderHistoryResponse;
+import com.example.barofarm_backend.dto.response.SalesHistoryResponse;
 import com.example.barofarm_backend.entity.OrderStatus;
 import com.example.barofarm_backend.entity.User;
 import com.example.barofarm_backend.service.OrderService;
 import com.example.barofarm_backend.service.UserService;
 import com.example.barofarm_backend.util.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +37,7 @@ public class OrderController {
         return ResponseEntity.ok(result);
     }
 
-
+    // user 마이페이지 결제 내역 조회
     @GetMapping("/history")
     public ResponseEntity<List<OrderHistoryResponse>> getOrderHistory(@RequestHeader("Authorization") String token) {
         String email = jwtTokenProvider.getEmail(token.replace("Bearer ", ""));
@@ -74,6 +76,19 @@ public class OrderController {
         orderService.cancelOrder(orderId, user);
         return ResponseEntity.ok("주문이 취소되었습니다.");
     }
+
+    // 농부 판매내역 조회
+    @GetMapping("/sales/history")
+    public ResponseEntity<List<SalesHistoryResponse>> getSalesHistory(@RequestHeader("Authorization") String token) {
+        System.out.println(">>> [요청 도착] /sales/history 호출됨");
+        String email = jwtTokenProvider.getEmail(token.replace("Bearer ", ""));
+        User seller = userService.getUserByEmail(email)
+                .orElseThrow(() -> new RuntimeException("판매자 정보를 찾을 수 없습니다."));
+
+        List<SalesHistoryResponse> salesHistory = orderService.getSalesHistory(seller);
+        return ResponseEntity.ok(salesHistory);
+    }
+
 
 
 }
