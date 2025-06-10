@@ -6,6 +6,7 @@ import com.example.barofarm_backend.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,18 +18,25 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping
-    public ResponseEntity<ReviewResponseDto> create(@RequestBody ReviewRequestDto dto, @AuthenticationPrincipal com.example.barofarm_backend.security.UserPrincipal user) {
-        return ResponseEntity.ok(reviewService.createReview(user.getId(), dto));
+    public ResponseEntity<ReviewResponseDto> create(@RequestBody ReviewRequestDto dto,
+                                                    @AuthenticationPrincipal User user) {
+        Long userId = Long.parseLong(user.getUsername());
+        return ResponseEntity.ok(reviewService.createReview(userId, dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReviewResponseDto> update(@PathVariable Long id, @RequestBody ReviewRequestDto dto, @AuthenticationPrincipal com.example.barofarm_backend.security.UserPrincipal user) {
-        return ResponseEntity.ok(reviewService.updateReview(id, dto, user.getId()));
+    public ResponseEntity<ReviewResponseDto> update(@PathVariable Long id,
+                                                    @RequestBody ReviewRequestDto dto,
+                                                    @AuthenticationPrincipal User user) {
+        Long userId = Long.parseLong(user.getUsername());
+        return ResponseEntity.ok(reviewService.updateReview(id, dto, userId));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal com.example.barofarm_backend.security.UserPrincipal user) {
-        reviewService.deleteReview(id, user.getId());
+    public ResponseEntity<Void> delete(@PathVariable Long id,
+                                       @AuthenticationPrincipal User user) {
+        Long userId = Long.parseLong(user.getUsername());
+        reviewService.deleteReview(id, userId);
         return ResponseEntity.noContent().build();
     }
 

@@ -9,15 +9,25 @@ import java.util.UUID;
 
 @Service
 public class FileUploadService {
-    private final String uploadDir = "uploads/review-images/";
+
+    private final String uploadDir = System.getProperty("user.dir") + "/uploads/review-images/";
 
     public String upload(MultipartFile file) {
         try {
+            // 디렉토리 없으면 생성
+            File directory = new File(uploadDir);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
             String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
             File dest = new File(uploadDir + filename);
-            dest.getParentFile().mkdirs();
+
             file.transferTo(dest);
-            return "/" + uploadDir + filename;
+
+            // 프론트에서 접근 가능한 URL 경로 리턴
+            return "/uploads/review-images/" + filename;
+
         } catch (IOException e) {
             throw new RuntimeException("이미지 업로드 실패", e);
         }

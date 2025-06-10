@@ -41,7 +41,11 @@ public class SecurityConfig {
                                 "/api/products",
                                 "/api/products/**",
                                 "/api/b2b/**",
-                                "/api/wishlist"
+                                "/api/wishlist",
+                                "/api/reviews/product/**",
+                                "/api/reviews/product/*/average",
+                                "/api/reviews/upload/image",
+                                "/uploads/**"
                         ).permitAll()
 
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // 관리자 전용
