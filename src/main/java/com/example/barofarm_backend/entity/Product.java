@@ -51,4 +51,10 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wishlist> likedUsers = new ArrayList<>();
 
+
+    // 판매내역 조회 위해서 필요함.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seller_id")
+    private User seller;
+
 }
