@@ -4,11 +4,9 @@ import com.example.barofarm_backend.dto.request.CheckoutRequest;
 import com.example.barofarm_backend.dto.response.OrderDetailResponse;
 import com.example.barofarm_backend.dto.response.OrderHistoryResponse;
 import com.example.barofarm_backend.dto.response.OrderResponse;
+import com.example.barofarm_backend.dto.response.SalesHistoryResponse;
 import com.example.barofarm_backend.entity.*;
-import com.example.barofarm_backend.repository.CartItemRepository;
-import com.example.barofarm_backend.repository.CartRepository;
-import com.example.barofarm_backend.repository.OrderRepository;
-import com.example.barofarm_backend.repository.ProductRepository;
+import com.example.barofarm_backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +25,7 @@ public class OrderService {
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
 
     // 장바구니 결제 > 주문 저장,재고 차감,장바구니 비우기
     public List<OrderResponse> checkout(User user, CheckoutRequest request) {
@@ -168,5 +169,54 @@ public class OrderService {
         order.setStatus(OrderStatus.CANCELLED);
         orderRepository.save(order);
     }
+
+
+    // 농부 판매 이력 조회
+    public List<SalesHistoryResponse> getSalesHistory(User seller) {
+        // Step 1: 판매자가 등록한 상품 목록
+        List<Product> sellerProducts = productRepository.findByUserId(seller.getId());
+
+        // Step 2: productId만 추출
+        List<Long> productIds = sellerProducts.stream()
+                .map(Product::getProductId)
+                .toList();
+
+        // Step 3: 해당 productId에 해당하는 주문 아이템 조회
+        List<OrderItem> items = orderItemRepository.findByProductIdIn(productIds);
+        System.out.println(">>> [DB 조회 결과] 판매자가 등록한 OrderItem 수 = " + items.size());
+
+        // Step 4: 주문별로 그룹화
+        Map<Long, List<OrderItem>> orderMap = items.stream()
+                .collect(Collectors.groupingBy(item -> item.getOrder().getId()));
+
+        return orderMap.entrySet().stream().map(entry -> {
+            Order order = entry.getValue().get(0).getOrder();
+            String buyerName = order.getUser().getName();
+
+            List<SalesHistoryResponse.SalesItem> productInfos = entry.getValue().stream()
+                    .map(i -> SalesHistoryResponse.SalesItem.builder()
+                            .productId(i.getProductId())
+                            .productName(i.getProductName())
+                            .quantity(i.getQuantity())
+                            .price(i.getPrice())
+                            .discountRate(0) // 없으면 0
+                            .totalPrice(i.getTotalPrice())
+                            .build())
+                    .toList();
+
+            return SalesHistoryResponse.builder()
+                    .orderId(order.getId())
+                    .orderNumber("ORD-" + order.getId())
+                    .buyerName(buyerName)
+                    .orderedAt(order.getOrderedAt())
+                    .totalAmount(order.getTotalAmount())
+                    .status(order.getStatus().name())
+                    .paymentMethod(order.getPaymentMethod())
+                    .items(productInfos)
+                    .build();
+        }).toList();
+    }
+
+
 
 }
