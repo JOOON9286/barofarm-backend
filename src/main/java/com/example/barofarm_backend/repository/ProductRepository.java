@@ -11,5 +11,6 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByUser(User user);
+    List<Product> findByUserId(Long userId); // 판매자가 등록한 상품 찾기
 }
     
