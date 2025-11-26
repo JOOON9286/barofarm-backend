@@ -219,4 +219,7 @@ public class OrderService {
 
 
 
+    public List<Order> getOrdersByFarmer(User farmer) {
+        return orderRepository.findOrdersByFarmerId(farmer.getId());
+    }
 }

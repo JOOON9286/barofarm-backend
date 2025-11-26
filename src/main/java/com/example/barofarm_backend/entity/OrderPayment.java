@@ -29,6 +29,9 @@ public class OrderPayment {
     @Column(nullable = false, length = 20)
     private OrderStatus status;             // PENDING, PAID, FAILED, CANCELLED
 
+    @Column(nullable = false)
+    private Long userId;
+
     // 승인 후 저장되는 값들
     private String paymentKey;
     private String method;                  // CARD/ACCOUNT
