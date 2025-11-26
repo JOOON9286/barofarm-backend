@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface B2BRequestRepository extends JpaRepository<B2BRequest, Long> {
-//    List<B2BRequest> findByUserId(Long userId);
+    List<B2BRequest> findByUserId(Long userId);
 }
