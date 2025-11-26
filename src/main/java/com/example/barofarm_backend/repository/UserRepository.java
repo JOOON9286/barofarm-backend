@@ -11,4 +11,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // 항상 id 기준 오름차순 정렬
     List<User> findAllByOrderByIdAsc();
+
+    List<User> findByRole(String role);
 }
