@@ -8,8 +8,10 @@ import com.example.barofarm_backend.dto.response.CreateOrderResponse;
 import com.example.barofarm_backend.service.PaymentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -35,5 +37,14 @@ public class PaymentController {
     @PostMapping("/payments/cancel")
     public Map<String, Object> cancel(@Valid @RequestBody CancelRequest req) {
         return paymentService.cancel(req);
+    }
+
+    /** 4) 마이페이지 - 내 결제 내역 조회 */
+    @GetMapping("/payments/my")
+    public List<ConfirmResponse> getMyPayments(
+            // principal 안에 있는 id 프로퍼티를 그대로 꺼내오는 방식
+            @AuthenticationPrincipal(expression = "id") Long userId
+    ) {
+        return paymentService.getMyPayments(userId);
     }
 }
