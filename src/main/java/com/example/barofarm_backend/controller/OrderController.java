@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.example.barofarm_backend.entity.Order;
 
 import java.util.List;
 
@@ -87,6 +88,16 @@ public class OrderController {
 
         List<SalesHistoryResponse> salesHistory = orderService.getSalesHistory(seller);
         return ResponseEntity.ok(salesHistory);
+    }
+
+    @GetMapping("/sales/farmer")
+    public ResponseEntity<List<Order>> getFarmerSales(@RequestHeader("Authorization") String token) {
+        String email = jwtTokenProvider.getEmail(token.replace("Bearer ", ""));
+        User farmer = userService.getUserByEmail(email)
+                .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
+
+        List<Order> orders = orderService.getOrdersByFarmer(farmer);
+        return ResponseEntity.ok(orders);
     }
 
 

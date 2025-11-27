@@ -33,5 +33,12 @@ public class B2BRequest {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+    //  어떤 유저가 신청했는지 저장
+    @Column(name = "user_id")
+    private Long userId;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "user_id")
+//    private User user;
 
 }
