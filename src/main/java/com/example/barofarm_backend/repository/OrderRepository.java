@@ -2,6 +2,7 @@ package com.example.barofarm_backend.repository;
 
 import com.example.barofarm_backend.entity.Order;
 import com.example.barofarm_backend.entity.User;
+import com.example.barofarm_backend.entity.OrderStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,6 +14,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     // 사용자 기준 주문 내역 조회
     List<Order> findByUser(User user);
 
+
+    long countByStatus(OrderStatus status);
+
     // 판매자(farmer)가 올린 상품에 대해 들어온 주문 조회 
     @Query("""
         SELECT DISTINCT o FROM Order o
@@ -23,4 +27,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         ORDER BY o.orderedAt DESC
     """)
     List<Order> findOrdersByFarmerId(@Param("farmerId") Long farmerId);
+
 }

@@ -51,9 +51,11 @@ public class SecurityConfig {
                                 "/api/payments/**"          // 결제 승인 및 취소
                         ).permitAll()
 
+                    
                         .requestMatchers("/api/orders", "/api/payments/**").permitAll() // 결제 흐름 전부 허용
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll() // Swagger 문서 허용
                         .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll() // CORS Preflight 허용
+
                         .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN") // 관리자 전용
                         .requestMatchers("/api/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN") // 사용자
                         .requestMatchers("/api/farmers/**").hasAuthority("ROLE_FARMER") // 농부 전용
