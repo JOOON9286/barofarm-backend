@@ -13,12 +13,75 @@
 ## 시스템 구성도
 
 ```mermaid
-flowchart LR
-    FE["React Frontend"] -- REST API --> BE["Spring Boot Backend<br/>(AWS EC2)"]
-    BE --> DB[("PostgreSQL")]
-    BE --> S3[("AWS S3<br/>리뷰 이미지")]
-    BE --> Toss["Toss Payments API"]
+flowchart TB
+    subgraph Client["Client (React)"]
+        UserFE["소비자 화면"]
+        FarmerFE["농가(판매자) 화면"]
+        AdminFE["관리자 화면"]
+    end
+
+    subgraph Backend["Spring Boot Backend (AWS EC2)"]
+        Auth["Auth<br/>회원 인증"]
+        Product["Product<br/>상품"]
+        Cart["Cart / Order<br/>장바구니·주문"]
+        Review["Review<br/>리뷰"]
+        Farmer["Farmer<br/>농가 계정"]
+        Admin["Admin<br/>관리자 승인"]
+    end
+
+    DB[("PostgreSQL")]
+    S3[("AWS S3<br/>리뷰 이미지")]
+    Toss["Toss Payments API"]
+
+    UserFE --> Auth
+    UserFE --> Product
+    UserFE --> Cart
+    UserFE --> Review
+    FarmerFE --> Farmer
+    FarmerFE --> Product
+    AdminFE --> Admin
+
+    Auth --> DB
+    Product --> DB
+    Cart --> DB
+    Cart --> Toss
+    Review --> DB
+    Review --> S3
+    Farmer --> DB
+    Admin --> DB
 ```
+
+## 전체 흐름도
+
+소비자가 상품을 주문하는 핵심 플로우입니다.
+
+```mermaid
+sequenceDiagram
+    actor 소비자
+    participant FE as Frontend
+    participant BE as Backend
+    participant DB as PostgreSQL
+    participant Toss as Toss Payments
+
+    소비자->>FE: 로그인
+    FE->>BE: 로그인 요청
+    BE->>DB: 사용자 조회
+    BE-->>FE: JWT 발급
+
+    소비자->>FE: 상품 조회 · 장바구니 담기
+    FE->>BE: 상품/장바구니 API 호출
+    BE->>DB: 조회 및 저장
+
+    소비자->>FE: 주문 및 결제
+    FE->>Toss: 결제 위젯 호출
+    Toss-->>FE: 결제 승인
+    FE->>BE: 주문 생성 요청
+    BE->>Toss: 결제 승인 확인
+    BE->>DB: 주문 저장 · 재고 반영
+    BE-->>FE: 주문 완료
+```
+
+> Backend 저장소: [barofarm-backend](https://github.com/JOOON9286/barofarm-backend) · Frontend 저장소: [barofarm-frontend](https://github.com/JOOON9286/barofarm-frontend)
 
 ## 주요 기능
 
