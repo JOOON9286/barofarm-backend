@@ -1,4 +1,4 @@
-// 📁 admin/dto/AdminUserDto.java
+// admin/dto/AdminUserDto.java
 package com.example.barofarm_backend.admin.dto;
 
 import lombok.AllArgsConstructor;

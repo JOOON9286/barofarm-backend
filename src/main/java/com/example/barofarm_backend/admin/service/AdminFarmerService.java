@@ -1,4 +1,4 @@
-// 📁 admin/service/AdminFarmerService.java (전체 코드)
+// admin/service/AdminFarmerService.java (전체 코드)
 
 package com.example.barofarm_backend.admin.service;
 
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AdminFarmerService {
 
-    private final FarmerRepository farmerRepository; // ⭐️ Farmer 엔티티 기반
+    private final FarmerRepository farmerRepository; // Farmer 엔티티 기반
     private final UserRepository userRepository;
 
     // 1. 승인 상태에 따른 농부 목록 조회

@@ -1,4 +1,4 @@
-// 📁 admin/controller/AdminFarmerController.java (전체 코드)
+// admin/controller/AdminFarmerController.java (전체 코드)
 
 package com.example.barofarm_backend.admin.controller;
 

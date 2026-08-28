@@ -1,4 +1,4 @@
-// 📁 admin/dto/AdminFarmerDto.java (수정)
+// admin/dto/AdminFarmerDto.java (수정)
 package com.example.barofarm_backend.admin.dto;
 
 import lombok.Builder;
@@ -13,7 +13,7 @@ public class AdminFarmerDto {
     private String phone; // User 연락처
     private String role; // User 역할 (ROLE_FARMER)
 
-    // ⭐️ Farmer 엔티티 정보
+    // Farmer 엔티티 정보
     private Long farmerId; // Farmer 엔티티의 ID
     private String certificationNumber; // 농가 인증 번호
     private String description; // 농부 설명

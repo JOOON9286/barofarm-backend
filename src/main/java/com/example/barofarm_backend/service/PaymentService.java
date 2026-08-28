@@ -53,7 +53,7 @@ public class PaymentService {
                 .orderId(newOrderId)
                 .orderName(req.orderName())
                 .amount(req.amount())
-                .userId(req.userId())  // ✅ 어떤 유저 결제인지 저장
+                .userId(req.userId())  // 어떤 유저 결제인지 저장
                 .status(OrderPayment.OrderStatus.PENDING)
                 .build();
 

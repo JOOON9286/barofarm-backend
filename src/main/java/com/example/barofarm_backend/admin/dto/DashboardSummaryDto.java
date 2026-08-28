@@ -1,4 +1,4 @@
-// 📁 admin/dto/DashboardSummaryDto.java
+// admin/dto/DashboardSummaryDto.java
 package com.example.barofarm_backend.admin.dto;
 
 import lombok.AllArgsConstructor;

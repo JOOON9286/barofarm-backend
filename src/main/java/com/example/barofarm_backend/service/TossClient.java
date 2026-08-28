@@ -28,7 +28,7 @@ public class TossClient {
     /**  1. 결제 요청 (ready) */
     public Map<String, Object> requestPayment(String orderId, String orderName, int amount, String successUrl, String failUrl) {
         // Toss 결제 API URL (정식 REST)
-        String url = baseUrl + "/payments"; // ✅ 올바른 주소
+        String url = baseUrl + "/payments"; // 올바른 주소
 
         // Authorization 헤더 생성
         String authHeader = "Basic " + Base64.getEncoder()

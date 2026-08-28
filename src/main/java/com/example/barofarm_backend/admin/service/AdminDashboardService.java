@@ -1,15 +1,15 @@
-// 📁 admin/service/AdminDashboardService.java (⭐️ 최종 수정본)
+// admin/service/AdminDashboardService.java (최종 수정본)
 
 package com.example.barofarm_backend.admin.service;
 
 import com.example.barofarm_backend.admin.dto.ChartDataDto;
 import com.example.barofarm_backend.admin.dto.DashboardSummaryDto;
 import com.example.barofarm_backend.admin.dto.OrderStatusCountsDto;
-// ⭐️ 님의 기존 Repository 임포트
+// 님의 기존 Repository 임포트
 import com.example.barofarm_backend.repository.OrderPaymentRepository;
 import com.example.barofarm_backend.repository.OrderRepository;
 import com.example.barofarm_backend.repository.UserRepository;
-// ⭐️ 님의 'Order.java'가 쓰는 OrderStatus Enum 위치 (가정)
+// 님의 'Order.java'가 쓰는 OrderStatus Enum 위치 (가정)
 import com.example.barofarm_backend.entity.OrderStatus;
 
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,7 @@ public class AdminDashboardService {
         // TODO: getWeeklySignupChart() 로직 구현 (현재는 비어있음)
         List<ChartDataDto> signupData = getWeeklySignupChart();
 
-        // 3. 주문 현황 (⭐️ 님의 Enum에 맞게 수정 완료!)
+        // 3. 주문 현황 (님의 Enum에 맞게 수정 완료!)
         // 님의 OrderStatus Enum: PAYMENT_COMPLETED, PREPARING, SHIPPING, DELIVERED, CANCELLED
 
         // '주문 완료' (프론트 기준) = 결제 완료(PAYMENT_COMPLETED) + 배송 준비중(PREPARING)
@@ -76,7 +76,7 @@ public class AdminDashboardService {
         // (네이티브 쿼리가 더 효율적일 수 있으나, JPA 방식으로 우선 구현)
         // TODO: UserRepository에 네이티브 쿼리 추가로 성능 최적화 필요
 
-        // ⭐️ 우선 비어있는 리스트 반환 (이 로직은 JPA로 복잡함)
+        // 우선 비어있는 리스트 반환 (이 로직은 JPA로 복잡함)
         return List.of();
     }
 }
